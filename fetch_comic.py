@@ -16,16 +16,13 @@ def get_random_comic_id():
     return random.randint(1, latest_id)
 
 
-def get_comic_response(comic_id):
-    url = f"https://xkcd.com/{comic_id}/info.0.json"
-    response = requests.get(url)
-    response.raise_for_status()
-    return response.json()
-
-
 def fetch_random_comic(folder):
     comic_id = get_random_comic_id()
-    comic_response = get_comic_response(comic_id)
+    url = f"https://xkcd.com/{comic_id}/info.0.json"
+
+    response = requests.get(url)
+    response.raise_for_status()
+    comic_response = response.json()
 
     image_url = comic_response["img"]
     alt_text = comic_response.get("alt", "")
