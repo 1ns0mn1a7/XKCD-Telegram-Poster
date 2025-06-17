@@ -5,13 +5,13 @@ from fetch_comic import fetch_random_comic
 from pathlib import Path
 
 
-def publish_comic(bot, directory: str, channel_id: str) -> Path:
-    image_path, caption = fetch_random_comic(folder=directory)
+def get_comic(directory: str):
+    return fetch_random_comic(folder=directory)
 
+
+def publish_comic(bot, channel_id: str, image_path: Path, caption: str):
     with open(image_path, "rb") as photo:
         bot.send_photo(chat_id=channel_id, photo=photo, caption=caption)
-
-    return image_path
 
 
 def main():
@@ -27,7 +27,8 @@ def main():
 
     image_path = None
     try:
-        image_path = publish_comic(bot, directory="images", channel_id=channel_id)
+        image_path, caption = get_comic("images")
+        publish_comic(bot, channel_id, image_path, caption)
     finally:
         if image_path and Path(image_path).exists():
             try:
